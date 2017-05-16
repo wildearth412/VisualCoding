@@ -1,12 +1,12 @@
-﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\shader\universeShader06.shader">
+﻿<Properties StartupItem="Assembly-CSharp-firstpass.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\shader\universeShader01.shader">
     <Files>
       <File FileName="Assets\shader\universeShader03.shader" Line="1" Column="1" />
-      <File FileName="Assets\shader\universeShader01.shader" Line="1" Column="1" />
-      <File FileName="Assets\shader\universeShader04.shader" Line="67" Column="58" />
-      <File FileName="Assets\shader\universeShader05.shader" Line="67" Column="59" />
-      <File FileName="Assets\shader\universeShader06.shader" Line="79" Column="72" />
+      <File FileName="Assets\shader\universeShader01.shader" Line="81" Column="10" />
+      <File FileName="Assets\shader\universeShader04.shader" Line="1" Column="1" />
+      <File FileName="Assets\shader\universeShader05.shader" Line="1" Column="1" />
+      <File FileName="Assets\shader\universeShader06.shader" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
