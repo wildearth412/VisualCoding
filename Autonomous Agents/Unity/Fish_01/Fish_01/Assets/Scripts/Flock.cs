@@ -2,15 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Flock : MonoBehaviour {
+public class Flock
+{
+    List<Boid> boids;
 
-	// Use this for initialization
-	void Start () {
-		
+    public Flock()
+    {
+        boids = new List<Boid>();
+    }
+
+	public void Input ()
+    {
+		foreach(Boid b in boids)
+        {
+            b.SetInput();
+        }
 	}
+
+    public void Initialize(GameObject prefab)
+    {
+        foreach (Boid b in boids)
+        {
+            b.InitializeBoid(prefab);
+        }
+    }
 	
-	// Update is called once per frame
-	void Update () {
-		
+	public void Run (Vector3 v)
+    {
+		foreach(Boid b in boids)
+        {
+            b.RunBoid(boids,v);
+        }
 	}
+
+    public void AddBoid(Boid b)
+    {
+        boids.Add(b);
+    }
 }

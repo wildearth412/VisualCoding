@@ -2,15 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fish_01 : MonoBehaviour {
+public class Fish_01 : MonoBehaviour
+{
+    public GameObject prefab;
+    public Vector3 birthRange;
+    Flock flock;
 
-	// Use this for initialization
-	void Start () {
-		
+	void Start ()
+    {
+        flock = new Flock();
+        for(int i=0; i<100; i++)
+        {
+            Boid b = new Boid(Random.value * birthRange.x, Random.value * birthRange.y, Random.value * birthRange.z);
+            flock.AddBoid(b);
+        }
+        flock.Initialize(prefab);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+    {
+        Camera camera = GetComponent<Camera>();
+        Vector3 v = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 500.0f);
+        v = camera.ScreenToWorldPoint(v);
+        flock.Run(v);
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            flock.Input();
+        }
 	}
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boid 
+public class Boid : MonoBehaviour
 {
 	Vector3 location;
 	Vector3 velocity;
@@ -17,21 +17,24 @@ public class Boid
 	int status;
 	int timer;
 
+    GameObject go;
 
-	Boid(float x,float y,float z) 
+
+	public Boid(float x,float y,float z) 
 	{
 		acceleration = new Vector3(0,0,0);
 		velocity = new Vector3(0,0,0);
 		location = new Vector3 (x, y, z);
 		randomGoal = new Vector3(Random.value*1200.0f,Random.value*1200.0f,Random.value*1200.0f);
 		r = 4.5f;
-		maxSpeed = 4.0f;
+		maxSpeed = 2.0f;
 		maxForce = .1f;
 		status = 0;
 		timer = 0;
+        go = null;
 	}
 
-	void UpdateBoid ()       // motion model
+	void UpdateBoidAttr ()       // motion model
 	{
 		velocity += acceleration;
 		Vector3.ClampMagnitude (velocity, maxSpeed);
@@ -44,10 +47,10 @@ public class Boid
 		acceleration += force;
 	}
 
-	void MouseBehavior(List <Boid> boids)
+	void MouseBehavior(List <Boid> boids,Vector3 v)
 	{
 		Vector3 separate = Separate (boids);
-		Vector3 seek = Seek(new Vector3(Input.mousePosition.x,Input.mousePosition.y,0));
+        Vector3 seek = Seek(v);
 
 		separate *= 1.5f;
 		seek *= 0.5f;
@@ -55,13 +58,14 @@ public class Boid
 		ApplyForce (separate);
 		ApplyForce (seek);
 
-		Arrive (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 0));
-	}
+		//Arrive (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 0));
+        Arrive(v);
+    }
 
 	void RandomSeek(List<Boid> boids)
 	{
-		if (timer >= 120) {
-			randomGoal = new Vector3 (Random.value * 1200.0f, Random.value * 1200.0f, Random.value * 1200.0f);
+		if (timer >= 1200) {
+			randomGoal = Random.insideUnitSphere * 100.0f;
 			timer = 0;
 		}
 		else 
@@ -84,7 +88,7 @@ public class Boid
 	void RandomSeek2(List<Boid> boids)
 	{
 		Vector3 separate = Separate (boids);
-		Vector3 seek = Seek(new Vector3 (Random.value * 1200.0f, Random.value * 1200.0f, Random.value * 1200.0f));
+		Vector3 seek = Seek(Random.insideUnitSphere * 100.0f);
 
 		separate *= 1.5f;
 		seek *= Mathf.PerlinNoise((float)Time.frameCount,(float)Time.frameCount);
@@ -106,7 +110,7 @@ public class Boid
 		return steer;
 	}
 
-	Vector3 Arrive(Vector3 target)
+	void Arrive(Vector3 target)
 	{
 		Vector3 desired = target - location;
 		float d = desired.magnitude;
@@ -234,8 +238,7 @@ public class Boid
 		}
 	}
 
-
-	void SetInput()
+	public void SetInput()
 	{
 		status += 1;
 		if (status > 2) 
@@ -244,13 +247,24 @@ public class Boid
 		}
 	}
 
-	void RunBoid(List<Boid> boids)
+    public void InitializeBoid(GameObject prefab)
+    {
+        go = (GameObject)Instantiate(prefab, location, Quaternion.FromToRotation(Vector3.up, velocity));
+    }
+
+    public void UpdateBoid()
+    {
+        go.transform.position = location;
+        go.transform.rotation = Quaternion.FromToRotation(Vector3.up, velocity);
+    }
+
+    public void RunBoid(List<Boid> boids,Vector3 v)
 	{
 		switch (status) 
 		{
 			case 0:
 				Flocking (boids);
-				MouseBehavior (boids);
+				MouseBehavior (boids,v);
 				break;
 			case 1:
 				RandomSeek (boids);
@@ -259,7 +273,8 @@ public class Boid
 				RandomSeek2 (boids);
 				break;
 		}
-		UpdateBoid ();
+		UpdateBoidAttr ();
+        UpdateBoid();
 	}
 
 }
